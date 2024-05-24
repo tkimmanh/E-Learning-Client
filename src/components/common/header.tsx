@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
 import { ModeToggle } from '../mode-toggle'
 
-const Header = () => {
+const Header = ({ className }: { className?: string }) => {
   return (
-    <div className='flex justify-between px-5 h-16 border-b-[0.5px] border-gray-800'>
+    <div className={`flex justify-between px-5 h-16 border-b-[0.5px] border-gray-800 ${className}`}>
       <Link to='/' className='font-bold text-lg rounded-lg my-auto'>
         E-Learning
       </Link>
