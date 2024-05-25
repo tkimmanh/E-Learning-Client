@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+
 // ** zod
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -17,6 +18,7 @@ import { useNavigate } from 'react-router-dom'
 import { authRoute } from '@/router/auh.route'
 
 // ** apis
+import { loginApi } from '@/apis/auth.api'
 
 // ** toastify
 // import { Bounce, toast } from 'react-toastify'
@@ -31,7 +33,9 @@ export function LoginForm() {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+    await loginApi(values).then((res) => {
+      console.log(res)
+    })
   }
 
   const navigate = useNavigate()
