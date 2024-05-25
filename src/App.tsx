@@ -17,14 +17,16 @@ import RegisterPage from './page/(auth)/register'
 
 function App() {
   return (
-    <Routes>
-      <Route element={<RootLayout />}>
-        <Route path={courseRoute.listCourse.path} element={<ListCourse />} />
-      </Route>
-      <Route element={<AuthLayout />}>
-        <Route path={authRoute.register.path} element={<RegisterPage />} />
-      </Route>
-    </Routes>
+    <>
+      <Routes>
+        <Route element={<RootLayout />}>
+          <Route path={courseRoute.listCourse.path} element={<ListCourse />} />
+        </Route>
+        <Route element={<AuthLayout />}>
+          <Route path={authRoute.register.path} element={<RegisterPage />} />
+        </Route>
+      </Routes>
+    </>
   )
 }
 

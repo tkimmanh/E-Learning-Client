@@ -16,6 +16,12 @@ import { useNavigate } from 'react-router-dom'
 // ** config
 import { authRoute } from '@/router/auh.route'
 
+// ** apis
+import { registerApi } from '@/apis/auth.api'
+
+// ** toastify
+import { Bounce, toast } from 'react-toastify'
+
 export function RegisterForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -26,8 +32,19 @@ export function RegisterForm() {
     }
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    await registerApi(values).then(() => {
+      toast.success('Đăng ký thành công', {
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+        transition: Bounce
+      })
+    })
   }
 
   const navigate = useNavigate()
