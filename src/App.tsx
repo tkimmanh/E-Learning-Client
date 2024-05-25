@@ -14,6 +14,7 @@ import { authRoute } from './router/auh.route'
 
 // ** pages
 import RegisterPage from './page/(auth)/register'
+import LoginPage from './page/(auth)/login'
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         </Route>
         <Route element={<AuthLayout />}>
           <Route path={authRoute.register.path} element={<RegisterPage />} />
+          <Route path={authRoute.login.path} element={<LoginPage />} />
         </Route>
       </Routes>
     </>
