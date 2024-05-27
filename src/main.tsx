@@ -16,11 +16,20 @@ import { BrowserRouter } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
+// ** redux
+import { Provider } from 'react-redux'
+import { persistor, store } from './redux/store.ts'
+import { PersistGate } from 'redux-persist/integration/react'
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
       <BrowserRouter>
-        <App />
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <App />
+          </PersistGate>
+        </Provider>
         <ToastContainer limit={1} />
       </BrowserRouter>
     </ThemeProvider>

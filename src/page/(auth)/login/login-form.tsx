@@ -17,13 +17,17 @@ import { useNavigate } from 'react-router-dom'
 // ** config
 import { authRoute } from '@/router/auh.route'
 
-// ** apis
-import { loginApi } from '@/apis/auth.api'
+// ** hooks
+import { useAppDispatch } from '@/hooks/useAppDispatch'
 
-// ** toastify
-// import { Bounce, toast } from 'react-toastify'
+// ** redux
+import { loginThunk } from '@/redux/action'
+import { commonRoutes } from '@/router/common.route'
 
 export function LoginForm() {
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,12 +37,10 @@ export function LoginForm() {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await loginApi(values).then((res) => {
-      console.log(res)
+    dispatch(loginThunk(values)).then(() => {
+      navigate(commonRoutes.home.path)
     })
   }
-
-  const navigate = useNavigate()
 
   return (
     <>

@@ -1,3 +1,5 @@
+// ** react
+import { useState } from 'react'
 // ** components
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -20,9 +22,14 @@ import { authRoute } from '@/router/auh.route'
 import { registerApi } from '@/apis/auth.api'
 
 // ** toastify
-import { Bounce, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
+
+// ** config
+import { toastConfig } from '@/config/toast.config'
 
 export function RegisterForm() {
+  const [loading, setLoading] = useState(false)
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,18 +40,17 @@ export function RegisterForm() {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await registerApi(values).then(() => {
-      toast.success('Đăng ký thành công', {
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'dark',
-        transition: Bounce
+    setLoading(true)
+    await registerApi(values)
+      .then(() => {
+        toast.success('Đăng ký thành công', {
+          ...toastConfig
+        })
+        setLoading(false)
       })
-    })
+      .catch(() => {
+        setLoading(false)
+      })
   }
 
   const navigate = useNavigate()
@@ -93,7 +99,9 @@ export function RegisterForm() {
               </FormItem>
             )}
           />
-          <Button type='submit'>Đăng ký</Button>
+          <Button disabled={loading} type='submit'>
+            Đăng ký
+          </Button>
         </form>
       </Form>
       <div className='flex items-center justify-center'>
