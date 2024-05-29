@@ -6,7 +6,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import { TUserResponse } from '@/types/auth'
 
 // ** action
-import { loginThunk } from './action'
+import { loginThunk, logoutThunk } from './action'
 
 interface TUserState {
   user: {
@@ -37,8 +37,9 @@ export const authSlice = createSlice({
       state.user = null
       state.isAuthenticated = false
     })
-    builder.addCase('auth/logout', (state) => {
+    builder.addCase(logoutThunk.fulfilled, (state) => {
       state.user = null
+      state.isAuthenticated = false
     })
   },
   reducers: {}

@@ -1,11 +1,5 @@
-import React from 'react'
-
-const spiner = () => {
-  return (
-    <div>
-      
-    </div>
-  )
+const Spiner = () => {
+  return <div></div>
 }
 
-export default spiner
+export default Spiner
