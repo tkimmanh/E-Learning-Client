@@ -25,11 +25,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
       <BrowserRouter>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
+        <PersistGate loading={null} persistor={persistor}>
+          <Provider store={store}>
             <App />
-          </PersistGate>
-        </Provider>
+          </Provider>
+        </PersistGate>
         <ToastContainer limit={1} />
       </BrowserRouter>
     </ThemeProvider>

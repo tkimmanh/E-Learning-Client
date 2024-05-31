@@ -3,7 +3,6 @@ import http from '@/lib/axios'
 
 // ** redux
 import { createAsyncThunk } from '@reduxjs/toolkit'
-
 // ** type
 import { TAuth, TUserResponse } from '@/types/auth'
 

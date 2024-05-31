@@ -16,6 +16,9 @@ import { authRoute } from './router/auh.route'
 import RegisterPage from './page/(auth)/register'
 import LoginPage from './page/(auth)/login'
 
+// ** components
+import PrivateRoute from './components/common/private-router'
+
 function App() {
   return (
     <>
@@ -23,7 +26,13 @@ function App() {
         <Route element={<RootLayout />}>
           <Route path={courseRoute.listCourse.path} element={<ListCourse />} />
         </Route>
-        <Route element={<AuthLayout />}>
+        <Route
+          element={
+            <PrivateRoute>
+              <AuthLayout />
+            </PrivateRoute>
+          }
+        >
           <Route path={authRoute.register.path} element={<RegisterPage />} />
           <Route path={authRoute.login.path} element={<LoginPage />} />
         </Route>
