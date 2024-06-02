@@ -19,15 +19,18 @@ import { authRoute } from '@/router/auh.route'
 
 // ** hooks
 import { useAppDispatch } from '@/hooks/useAppDispatch'
+import { useAppSelector } from '@/hooks/useAppSelector'
 
 // ** redux
-import { loginThunk } from '@/redux/action'
+import { currentUserThunk, loginThunk } from '@/redux/auth/action'
+
+// ** router
 import { commonRoutes } from '@/router/common.route'
 
 export function LoginForm() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-
+  const { loading } = useAppSelector((state) => state.auth)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,6 +42,7 @@ export function LoginForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     dispatch(loginThunk(values)).then(() => {
       navigate(commonRoutes.home.path)
+      dispatch(currentUserThunk())
     })
   }
 
@@ -81,8 +85,13 @@ export function LoginForm() {
         <h1 className='text-gray-400 w-full text-xs text-center font-semibold my-7'>NẾU BẠN CHƯA CÓ TÀI KHOẢN</h1>
         <div className='w-1/2 bg-gray-800 h-[0.1px]'></div>
       </div>
-      <Button onClick={() => navigate(authRoute.register.path)} className='w-full border ' variant={'ghost'}>
-        Đăng ký
+      <Button
+        disabled={loading}
+        onClick={() => navigate(authRoute.register.path)}
+        className='w-full border '
+        variant={'ghost'}
+      >
+        {loading ? '...' : 'Đăng nhập'}
       </Button>
     </>
   )

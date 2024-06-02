@@ -1,5 +1,5 @@
 const ListCourse = () => {
-  return <div>ListCourse</div>
+  return <div>List Couser</div>
 }
 
 export default ListCourse

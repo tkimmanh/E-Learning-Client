@@ -16,13 +16,20 @@ declare module 'axios' {
     __isRetryRequest?: boolean
   }
 }
+let csrfToken: string | null = null
 
 function createHttpInstance(): AxiosInstance {
   const instance = axios.create({
-    baseURL: BASE_URL
+    baseURL: BASE_URL,
+    withCredentials: true // cho phép axios gửi cookie
   })
   instance.interceptors.request.use(
-    function (config) {
+    async function (config) {
+      if (!csrfToken) {
+        const response = await axios.get(`${BASE_URL}csrf-token`, { withCredentials: true })
+        csrfToken = response.data.csrfToken
+      }
+      config.headers['X-CSRF-Token'] = csrfToken
       return config
     },
     function (error) {
@@ -37,10 +44,18 @@ function createHttpInstance(): AxiosInstance {
     function (error: AxiosError) {
       if (error.response) {
         const status = error.response.status
-        if (status === HttpStatusCode.Unauthorized && !error.response.config?.__isRetryRequest) {
+        if (status !== HttpStatusCode.UnprocessableEntity) {
+          const data: any | undefined = error.response.data
+          const message = data?.msg || error.message
+          toast.error(message, {
+            ...toastConfig
+          })
+          return Promise.reject(error)
+        }
+        if (status === (HttpStatusCode.Unauthorized as unknown) && !error.response.config?.__isRetryRequest) {
           return new Promise<void>((_resolve, reject) => {
             axios
-              .get('/auth/logout')
+              .get(`${BASE_URL}auth/logout`)
               .then(() => {
                 window.localStorage.clear()
                 window.location.href = '/login'
@@ -50,14 +65,6 @@ function createHttpInstance(): AxiosInstance {
                 reject(error)
               })
           })
-        }
-        if (status !== HttpStatusCode.UnprocessableEntity) {
-          const data: any | undefined = error.response.data
-          const message = data?.msg || error.message
-          toast.error(message, {
-            ...toastConfig
-          })
-          return Promise.reject(error)
         }
       }
       return Promise.reject(error)

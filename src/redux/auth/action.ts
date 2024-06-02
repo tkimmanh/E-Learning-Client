@@ -15,3 +15,8 @@ export const logoutThunk = createAsyncThunk('auth/logout', async () => {
   const response = await http.get('auth/logout')
   return response.data
 })
+
+export const currentUserThunk = createAsyncThunk('auth/current-user', async () => {
+  const response = await http.get('auth/current-user')
+  return response.data
+})

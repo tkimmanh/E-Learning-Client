@@ -4,9 +4,9 @@ import storage from 'redux-persist/lib/storage'
 
 // ** redux
 import { configureStore } from '@reduxjs/toolkit'
+import { authSlice } from './auth/slice'
 
 // ** slice
-import { authSlice } from './slice'
 
 // ** config
 const persistConfig = {

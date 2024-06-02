@@ -9,8 +9,10 @@ import { Avatar, AvatarFallback } from '@radix-ui/react-avatar'
 // ** redux
 import { useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
+import { logoutThunk } from '@/redux/auth/action'
+
+// ** hooks
 import { useAppDispatch } from '@/hooks/useAppDispatch'
-import { logoutThunk } from '@/redux/action'
 
 // ** config
 import { authRoute } from '@/router/auh.route'
@@ -59,9 +61,9 @@ const Header = ({ className }: { className?: string }) => {
                 </div>
                 <div className='w-full border-inherit border-b'></div>
                 <div className='w-full p-2'>
-                  <p onClick={() => dispatch(logoutThunk())} className='cursor-pointer '>
+                  <button onClick={() => dispatch(logoutThunk())} className='cursor-pointer '>
                     Đăng xuất
-                  </p>
+                  </button>
                 </div>
               </div>
             </PopoverContent>
