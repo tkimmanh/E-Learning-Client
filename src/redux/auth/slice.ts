@@ -32,8 +32,9 @@ export const authSlice = createSlice({
   initialState,
   extraReducers(builder) {
     // ** login
-    builder.addCase(loginThunk.fulfilled, (state) => {
+    builder.addCase(loginThunk.fulfilled, (state, action: PayloadAction<TUserResponse>) => {
       state.isAuthenticated = true
+      state.user = action.payload.result.user
       state.loading = false
     })
     builder.addCase(loginThunk.pending, (state) => {
@@ -47,6 +48,7 @@ export const authSlice = createSlice({
     // ** current user
     builder.addCase(currentUserThunk.fulfilled, (state, action: PayloadAction<TUserResponse>) => {
       state.user = action.payload.result.user
+      console.log('current user', action.payload.result.user)
       state.isAuthenticated = true
     })
     builder.addCase(currentUserThunk.rejected, (state) => {

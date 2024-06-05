@@ -100,7 +100,7 @@ export function RegisterForm() {
             )}
           />
           <Button disabled={loading} type='submit'>
-            Đăng ký
+            {loading ? '...' : 'Đăng ký'}
           </Button>
         </form>
       </Form>
@@ -109,13 +109,8 @@ export function RegisterForm() {
         <h1 className='text-gray-400 w-full text-xs text-center font-semibold my-7'>NẾU BẠN ĐÃ CÓ TÀI KHOẢN</h1>
         <div className='w-1/2 bg-gray-800 h-[0.1px]'></div>
       </div>
-      <Button
-        disabled={loading}
-        onClick={() => navigate(authRoute.login.path)}
-        className='w-full border '
-        variant={'ghost'}
-      >
-        {loading ? '...' : 'Đăng nhập'}
+      <Button onClick={() => navigate(authRoute.login.path)} className='w-full border ' variant={'ghost'}>
+        Đăng nhập
       </Button>
     </>
   )

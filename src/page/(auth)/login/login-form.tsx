@@ -77,7 +77,9 @@ export function LoginForm() {
               </FormItem>
             )}
           />
-          <Button type='submit'>Đăng nhập</Button>
+          <Button disabled={loading} type='submit'>
+            {loading ? '...' : 'Đăng nhập'}
+          </Button>
         </form>
       </Form>
       <div className='flex items-center justify-center'>
@@ -85,13 +87,8 @@ export function LoginForm() {
         <h1 className='text-gray-400 w-full text-xs text-center font-semibold my-7'>NẾU BẠN CHƯA CÓ TÀI KHOẢN</h1>
         <div className='w-1/2 bg-gray-800 h-[0.1px]'></div>
       </div>
-      <Button
-        disabled={loading}
-        onClick={() => navigate(authRoute.register.path)}
-        className='w-full border '
-        variant={'ghost'}
-      >
-        {loading ? '...' : 'Đăng nhập'}
+      <Button onClick={() => navigate(authRoute.register.path)} className='w-full border ' variant={'ghost'}>
+        Đăng ký
       </Button>
     </>
   )

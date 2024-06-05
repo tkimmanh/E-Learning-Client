@@ -1,3 +1,10 @@
+// ** router
+import { authRoute } from '@/router/auh.route'
+
+// ** react router
+import { Link } from 'react-router-dom'
+
+// ** components
 import { LoginForm } from './login-form'
 
 const LoginPage = () => {
@@ -8,6 +15,10 @@ const LoginPage = () => {
           <h1 className='font-semibold text-2xl text-center '>Đăng nhập</h1>
           <LoginForm></LoginForm>
         </div>
+        <Link className='mt-6 underline' to={authRoute.resetPassword.path}>
+          {' '}
+          Quên mật khẩu ?{' '}
+        </Link>
       </div>
     </div>
   )

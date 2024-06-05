@@ -6,5 +6,9 @@ export const authRoute = {
   register: {
     id: '2',
     path: '/register'
+  },
+  resetPassword: {
+    id: '3',
+    path: '/reset-password'
   }
 }

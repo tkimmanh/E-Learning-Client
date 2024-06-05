@@ -19,6 +19,7 @@ import { authRoute } from '@/router/auh.route'
 
 const Header = ({ className }: { className?: string }) => {
   const { isAuthenticated, user } = useSelector((state: RootState) => state.auth)
+
   const dispatch = useAppDispatch()
   return (
     <div className={`flex justify-between px-5 h-16 border-b-[0.5px] border-gray-800 ${className}`}>
