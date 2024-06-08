@@ -1,5 +1,5 @@
 // ** router
-import { authRoute } from '@/router/auh.route'
+import { authRoute } from '@/router/auth.route'
 
 // ** react router
 import { Link } from 'react-router-dom'

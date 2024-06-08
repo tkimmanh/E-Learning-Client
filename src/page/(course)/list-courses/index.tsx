@@ -1,5 +1,5 @@
-const ListCourse = () => {
+const ListCoursePage = () => {
   return <div>List Couser</div>
 }
 
-export default ListCourse
+export default ListCoursePage

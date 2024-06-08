@@ -21,7 +21,7 @@ import { useNavigate } from 'react-router-dom'
 import { forgotPasswordApi, resetPasswordApi } from '@/apis/auth.api'
 
 // ** config
-import { authRoute } from '@/router/auh.route'
+import { authRoute } from '@/router/auth.route'
 import { toastConfig } from '@/config/toast.config'
 
 // ** toast

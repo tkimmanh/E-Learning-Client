@@ -15,7 +15,7 @@ import { formSchema } from '@/lib/zod/login.schema'
 import { useNavigate } from 'react-router-dom'
 
 // ** config
-import { authRoute } from '@/router/auh.route'
+import { authRoute } from '@/router/auth.route'
 
 // ** hooks
 import { useAppDispatch } from '@/hooks/useAppDispatch'
@@ -41,8 +41,8 @@ export function LoginForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     dispatch(loginThunk(values)).then(() => {
-      navigate(commonRoutes.home.path)
       dispatch(currentUserThunk())
+      navigate(commonRoutes.home.path)
     })
   }
 

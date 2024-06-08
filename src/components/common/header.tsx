@@ -15,7 +15,9 @@ import { logoutThunk } from '@/redux/auth/action'
 import { useAppDispatch } from '@/hooks/useAppDispatch'
 
 // ** config
-import { authRoute } from '@/router/auh.route'
+import { authRoute } from '@/router/auth.route'
+import { dashboardRoute } from '@/router/dashboard.route'
+import { courseRoute } from '@/router/course.route'
 
 const Header = ({ className }: { className?: string }) => {
   const { isAuthenticated, user } = useSelector((state: RootState) => state.auth)
@@ -60,7 +62,24 @@ const Header = ({ className }: { className?: string }) => {
                     Tài khoản
                   </Link>
                 </div>
-                <div className='w-full border-inherit border-b'></div>
+                <div className='w-full p-2 flex flex-col gap-y-3'>
+                  <Link className='' to={dashboardRoute.dashboard.path}>
+                    Dashboard
+                  </Link>
+                </div>
+                {user && user?.role.includes('Instructor') ? (
+                  <div className='w-full p-2 flex flex-col gap-y-3'>
+                    <Link className='' to={courseRoute.createCourse.path}>
+                      Tạo khóa khọc
+                    </Link>
+                  </div>
+                ) : (
+                  <div className='w-full p-2 flex flex-col gap-y-3'>
+                    <Link className='' to={courseRoute.becomeInstructor.path}>
+                      Trở thành giảng viên
+                    </Link>
+                  </div>
+                )}
                 <div className='w-full p-2'>
                   <button onClick={() => dispatch(logoutThunk())} className='cursor-pointer '>
                     Đăng xuất

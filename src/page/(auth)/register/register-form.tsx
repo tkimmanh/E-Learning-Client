@@ -16,7 +16,7 @@ import { formSchema } from '@/lib/zod/regiser.schema'
 import { useNavigate } from 'react-router-dom'
 
 // ** config
-import { authRoute } from '@/router/auh.route'
+import { authRoute } from '@/router/auth.route'
 
 // ** apis
 import { registerApi } from '@/apis/auth.api'
