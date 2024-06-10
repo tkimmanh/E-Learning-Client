@@ -18,6 +18,7 @@ import ForgotPasswordPage from './page/(auth)/reset-password'
 import BecomeInstructorPage from './page/(instructor)/become-instrucror'
 import DashboardPage from './page/(dashboard)/dashboard'
 import ListCoursePage from './page/(course)/list-courses'
+import CreateCoursePage from './page/(course)/create-couser'
 
 // ** components
 import PrivateRoute from './components/common/private-router'
@@ -43,6 +44,7 @@ function App() {
         </Route>
         <Route element={<DashboardLayout />}>
           <Route path={dashboardRoute.dashboard.path} element={<DashboardPage />} />
+          <Route path={dashboardRoute.createCourse.path} element={<CreateCoursePage />} />
         </Route>
       </Routes>
     </>

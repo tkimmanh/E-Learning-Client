@@ -35,7 +35,7 @@ const DashboardLayout = () => {
             </div>
           </div>
         </div>
-        <div className='col-span-6 w-full'>
+        <div className='col-span-10 w-full pr-5'>
           <Outlet />
         </div>
       </div>
