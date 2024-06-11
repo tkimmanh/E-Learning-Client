@@ -30,7 +30,11 @@ import { toastConfig } from '@/config/toast.config'
 // ** react dropzone
 import { useDropzone } from 'react-dropzone'
 
-export function CreateCourseForm() {
+interface CreateCourseFormProps {
+  onCourseCreated: (course: { _id: string }) => void
+}
+
+export const CreateCourseForm: React.FC<CreateCourseFormProps> = ({ onCourseCreated }) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [imagePreview, setImagePreview] = useState<string>('')
   const [imageUrl, setImageUrl] = useState<string>('')
@@ -91,10 +95,17 @@ export function CreateCourseForm() {
 
   async function onSubmit(values: ICourse) {
     setLoading(true)
-    await createCourseApi(values).then(() => {
-      toast.success('Thêm khóa học thành công!', { ...toastConfig })
-    })
-    setLoading(false)
+    await createCourseApi(values)
+      .then((response) => {
+        onCourseCreated(response.data.course)
+        toast.success('Thêm khóa học thành công!', { ...toastConfig })
+      })
+      .catch((error) => {
+        console.error('Error creating course:', error)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }
 
   return (
