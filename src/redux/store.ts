@@ -5,6 +5,7 @@ import storage from 'redux-persist/lib/storage'
 // ** redux
 import { configureStore } from '@reduxjs/toolkit'
 import { authSlice } from './auth/slice'
+import { courseSlice } from './course/slice'
 
 // ** slice
 
@@ -17,7 +18,8 @@ const persistConfig = {
 
 export const store = configureStore({
   reducer: {
-    auth: persistReducer(persistConfig, authSlice.reducer)
+    auth: persistReducer(persistConfig, authSlice.reducer),
+    course: courseSlice.reducer
   }
 })
 

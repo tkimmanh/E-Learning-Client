@@ -5,7 +5,7 @@ export const courseRoute = {
   },
   detailCourse: {
     id: '2',
-    path: '/:courseId'
+    path: '/course/:courseId'
   },
   createCourse: {
     id: '3',

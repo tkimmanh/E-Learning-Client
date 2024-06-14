@@ -19,6 +19,7 @@ import BecomeInstructorPage from './page/(instructor)/become-instrucror'
 import DashboardPage from './page/(dashboard)/dashboard'
 import ListCoursePage from './page/(course)/list-courses'
 import CreateCoursePage from './page/(course)/create-couser'
+import DetailCoursePage from './page/(course)/couser-detail'
 
 // ** components
 import PrivateRoute from './components/common/private-router'
@@ -30,6 +31,7 @@ function App() {
         <Route element={<RootLayout />}>
           <Route path={courseRoute.listCourse.path} element={<ListCoursePage />} />
           <Route path={courseRoute.becomeInstructor.path} element={<BecomeInstructorPage />} />
+          <Route path={courseRoute.detailCourse.path} element={<DetailCoursePage />} />
         </Route>
         <Route
           element={
