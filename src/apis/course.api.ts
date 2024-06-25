@@ -37,3 +37,11 @@ export const uploadVideoApi = (body: FormData) => {
 export const deleteVideoApi = (body: { videoUrl: string }) => {
   return http.delete(`${BASE_URL}/delete-video`, { data: body })
 }
+
+export const getListCourseByUserApi = () => {
+  return http.get(`${BASE_URL}/list-course-by-user`)
+}
+
+export const getPurchasedCourseByIdApi = (courseId: string) => {
+  return http.get(`${BASE_URL}/purchased-course/${courseId}`)
+}

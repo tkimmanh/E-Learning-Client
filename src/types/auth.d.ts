@@ -14,5 +14,6 @@ export type TUserResponse = SuccessResponse<{
     picture: string
     role: string[]
     stripe_account_id: string
+    courses: string[]
   }
 }>

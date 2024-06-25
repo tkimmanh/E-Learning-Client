@@ -12,12 +12,14 @@ const CardMain = ({
   image,
   name,
   price,
-  courseId
+  courseId,
+  userCourse
 }: {
   image?: string
   name?: string
   price?: number | string
   courseId: string
+  userCourse: string | boolean
 }) => {
   return (
     <HoverCard>
@@ -38,7 +40,7 @@ const CardMain = ({
             <CardContent>
               <h1 className='font-semibold my-2'>{name || ''}</h1>
               <CardFooter className='p-0 '>
-                <span className='font-semibold'>{formatCurrencyVND(price as number) || 0}</span>
+                {userCourse ? 'Đã mua' : !price ? 'Miễn phí' : formatCurrencyVND(price as number)}
               </CardFooter>
             </CardContent>
           </Card>

@@ -14,5 +14,13 @@ export const courseRoute = {
   becomeInstructor: {
     id: '4',
     path: '/become-instructor'
+  },
+  cart: {
+    id: '5',
+    path: '/course/cart'
+  },
+  coursePlay: {
+    id: '6',
+    path: '/course/play/:courseId'
   }
 }

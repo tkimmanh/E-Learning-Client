@@ -5,6 +5,7 @@ export interface ICourse {
   description: string
   price: number
   paid: boolean | string
+  published: boolean
   image: string | FileList
 }
 export interface IChapter {

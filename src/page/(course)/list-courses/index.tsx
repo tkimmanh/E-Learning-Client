@@ -4,6 +4,7 @@ import CardMain from '@/components/card-main'
 // ** hook
 import { useAppDispatch } from '@/hooks/useAppDispatch'
 import { useAppSelector } from '@/hooks/useAppSelector'
+import { currentUserThunk } from '@/redux/auth/action'
 
 // ** redux
 import { getCoursesThunk } from '@/redux/course/action'
@@ -17,9 +18,12 @@ import { useEffect } from 'react'
 const ListCoursePage = () => {
   const dispatch = useAppDispatch()
   const { courses } = useAppSelector((state) => state.course)
+  const { user } = useAppSelector((state) => state.auth)
 
   useEffect(() => {
-    dispatch(getCoursesThunk())
+    dispatch(getCoursesThunk()).then(() => {
+      dispatch(currentUserThunk())
+    })
   }, [dispatch])
 
   return (
@@ -28,6 +32,7 @@ const ListCoursePage = () => {
         courses.map((course: CourseState) => {
           return (
             <CardMain
+              userCourse={user?.courses?.includes(course?._id as string) ?? false}
               key={course?._id}
               name={course?.name}
               price={course?.price}

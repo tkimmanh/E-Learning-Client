@@ -1,32 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useState } from 'react'
 
 // ** components
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
+import { Checkbox } from '@/components/ui/checkbox'
 
 // ** zod
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-
 // ** schema
 import { formSchema } from '@/lib/zod/couser.schema'
-import { Textarea } from '@/components/ui/textarea'
-
 // ** api
 import { createCourseApi, deleteImageCourseApi, uploadImageCourseApi } from '@/apis/course.api'
-
 // ** type
 import { ICourse } from '@/types/couser'
-
 // ** toast
 import { toast } from 'react-toastify'
-
 // ** config
 import { toastConfig } from '@/config/toast.config'
-
 // ** react dropzone
 import { useDropzone } from 'react-dropzone'
 
@@ -38,6 +34,8 @@ export const CreateCourseForm: React.FC<CreateCourseFormProps> = ({ onCourseCrea
   const [loading, setLoading] = useState<boolean>(false)
   const [imagePreview, setImagePreview] = useState<string>('')
   const [imageUrl, setImageUrl] = useState<string>('')
+  const [isPaid, setIsPaid] = useState<boolean>(true)
+
   const form = useForm<ICourse>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -45,7 +43,8 @@ export const CreateCourseForm: React.FC<CreateCourseFormProps> = ({ onCourseCrea
       image: '',
       description: '',
       price: 0,
-      paid: 'false'
+      paid: 'false',
+      published: false
     }
   })
 
@@ -69,18 +68,17 @@ export const CreateCourseForm: React.FC<CreateCourseFormProps> = ({ onCourseCrea
         setImagePreview(e.target?.result as string)
       }
       reader.readAsDataURL(file)
-
       // Upload image
       const imageUrl = await handleImageUpload(file)
       setImageUrl(imageUrl)
       form.setValue('image', imageUrl)
     }
   }
+
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: handleDrop,
     accept: 'image/*' as any
   })
-
   // xóa ảnh
   const handleImageDelete = async () => {
     try {
@@ -125,7 +123,6 @@ export const CreateCourseForm: React.FC<CreateCourseFormProps> = ({ onCourseCrea
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name='description'
@@ -139,7 +136,6 @@ export const CreateCourseForm: React.FC<CreateCourseFormProps> = ({ onCourseCrea
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name='price'
@@ -147,13 +143,12 @@ export const CreateCourseForm: React.FC<CreateCourseFormProps> = ({ onCourseCrea
               <FormItem>
                 <FormLabel>Giá</FormLabel>
                 <FormControl>
-                  <Input placeholder='Giá khóa học' {...field} />
+                  <Input placeholder='Giá khóa học' {...field} disabled={!isPaid} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-
           <div className='flex flex-col'>
             <FormField
               control={form.control}
@@ -201,14 +196,19 @@ export const CreateCourseForm: React.FC<CreateCourseFormProps> = ({ onCourseCrea
               </div>
             )}
           </div>
-
           <FormField
             control={form.control}
             name='paid'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Tình trạng</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value.toString() as string}>
+                <Select
+                  onValueChange={(value) => {
+                    field.onChange(value)
+                    setIsPaid(value === 'true')
+                  }}
+                  defaultValue={field.value.toString() as string}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder='Chọn tình trạng khóa học' />
@@ -223,7 +223,19 @@ export const CreateCourseForm: React.FC<CreateCourseFormProps> = ({ onCourseCrea
               </FormItem>
             )}
           />
-
+          <FormField
+            control={form.control}
+            name='published'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Xuất bản</FormLabel>
+                <FormControl>
+                  <Checkbox checked={field.value as boolean} onCheckedChange={field.onChange} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <Button type='submit'>{loading ? '...' : 'Lưu & tiếp tục'}</Button>
         </form>
       </Form>

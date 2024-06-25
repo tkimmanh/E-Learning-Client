@@ -8,5 +8,6 @@ export const formSchema = z.object({
     .min(0, { message: 'Không được dưới 0' })
     .max(1000000000, { message: 'Không được quá 100.000.0000 đồng' }),
   paid: z.string().default('false'),
-  image: z.any()
+  image: z.any(),
+  published: z.boolean().default(false)
 })

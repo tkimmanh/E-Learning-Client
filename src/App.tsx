@@ -10,6 +10,7 @@ import DashboardLayout from './page/(dashboard)/layout'
 import { courseRoute } from './router/course.route'
 import { authRoute } from './router/auth.route'
 import { dashboardRoute } from './router/dashboard.route'
+import { commonRoutes } from './router/common.route'
 
 // ** pages
 import RegisterPage from './page/(auth)/register'
@@ -18,8 +19,11 @@ import ForgotPasswordPage from './page/(auth)/reset-password'
 import BecomeInstructorPage from './page/(instructor)/become-instrucror'
 import DashboardPage from './page/(dashboard)/dashboard'
 import ListCoursePage from './page/(course)/list-courses'
-import CreateCoursePage from './page/(course)/create-couser'
-import DetailCoursePage from './page/(course)/couser-detail'
+import DetailCoursePage from './page/(course)/course-detail'
+import CreateCoursePage from './page/(course)/create-course'
+import PaymentSuccessPage from './page/(payment)/payment-success'
+import PaymentErrorPage from './page/(payment)/payment-error'
+import PlayList from './page/(course)/play-list'
 
 // ** components
 import PrivateRoute from './components/common/private-router'
@@ -32,6 +36,9 @@ function App() {
           <Route path={courseRoute.listCourse.path} element={<ListCoursePage />} />
           <Route path={courseRoute.becomeInstructor.path} element={<BecomeInstructorPage />} />
           <Route path={courseRoute.detailCourse.path} element={<DetailCoursePage />} />
+          <Route path={courseRoute.coursePlay.path} element={<PlayList />} />
+          <Route path={commonRoutes.paymentSuccess.path} element={<PaymentSuccessPage />} />
+          <Route path={commonRoutes.paymentError.path} element={<PaymentErrorPage />} />
         </Route>
         <Route
           element={

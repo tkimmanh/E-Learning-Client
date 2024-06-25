@@ -30,6 +30,7 @@ function createHttpInstance(): AxiosInstance {
         csrfToken = response.data.csrfToken
       }
       config.headers['X-CSRF-Token'] = csrfToken
+
       return config
     },
     function (error) {
@@ -44,7 +45,7 @@ function createHttpInstance(): AxiosInstance {
     function (error: AxiosError) {
       if (error.response) {
         const status = error.response.status
-        if (status !== HttpStatusCode.UnprocessableEntity) {
+        if (status !== HttpStatusCode.UnprocessableEntity && status !== HttpStatusCode.NotFound) {
           const data: any | undefined = error.response.data
           const message = data?.msg || error.message
           toast.error(message, {
@@ -67,6 +68,7 @@ function createHttpInstance(): AxiosInstance {
           })
         }
       }
+
       return Promise.reject(error)
     }
   )

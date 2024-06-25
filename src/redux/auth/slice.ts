@@ -8,7 +8,7 @@ import { TUserResponse } from '@/types/auth'
 // ** action
 import { currentUserThunk, loginThunk, logoutThunk } from './action'
 
-interface TUserState {
+export interface TUserState {
   user: {
     _id: string
     name: string
@@ -16,6 +16,7 @@ interface TUserState {
     picture: string
     role: string[]
     stripe_account_id: string
+    courses: string[]
   } | null
   isAuthenticated: boolean
   loading: boolean
@@ -46,9 +47,8 @@ export const authSlice = createSlice({
       state.loading = false
     })
     // ** current user
-    builder.addCase(currentUserThunk.fulfilled, (state, action: PayloadAction<TUserResponse>) => {
-      state.user = action.payload.result.user
-      console.log('current user', action.payload.result.user)
+    builder.addCase(currentUserThunk.fulfilled, (state, action: PayloadAction<TUserState>) => {
+      state.user = action.payload.user
       state.isAuthenticated = true
     })
     builder.addCase(currentUserThunk.rejected, (state) => {

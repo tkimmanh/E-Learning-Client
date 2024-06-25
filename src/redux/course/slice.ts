@@ -34,10 +34,11 @@ export const courseSlice = createSlice({
     })
     builder.addCase(getCoursesThunk.rejected, (state) => {
       state.loading = false
+      state.courses = null
     })
     // ** detail course
     builder.addCase(getDetailCourseThunk.fulfilled, (state, action: PayloadAction<CourseStateSuccess>) => {
-      state.course = action.payload.result
+      state.course = action.payload?.result
       state.loadingCourse = false
     })
     builder.addCase(getDetailCourseThunk.pending, (state) => {
@@ -45,6 +46,7 @@ export const courseSlice = createSlice({
     })
     builder.addCase(getDetailCourseThunk.rejected, (state) => {
       state.loadingCourse = false
+      state.course = null
     })
   },
   reducers: {}

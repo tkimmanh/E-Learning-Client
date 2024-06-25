@@ -1,6 +1,6 @@
 // react
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
 // component
 import { Button } from '@/components/ui/button'
@@ -15,6 +15,7 @@ import { useAppDispatch } from '@/hooks/useAppDispatch'
 // redux
 import { RootState } from '@/redux/store'
 import { getDetailCourseThunk } from '@/redux/course/action'
+import { addToCartThunk } from '@/redux/cart/actions'
 
 // types
 import { IChapter } from '@/types/couser'
@@ -24,26 +25,41 @@ import dayjs from 'dayjs'
 
 // utils
 import { formatCurrencyVND } from '@/lib/utils'
-import VideoModal from '@/components/video-modal'
+
+// ** api
+import { createPaymentApi } from '@/redux/payment/action'
+import { ILink } from '@/types/link'
 
 const DetailCoursePage = () => {
   const { courseId } = useParams()
 
-  const { course } = useAppSelector((state: RootState) => state.course)
+  const { course, loading } = useAppSelector((state: RootState) => state.course)
 
   const dispatch = useAppDispatch()
 
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [currentVideoUrl, setCurrentVideoUrl] = useState('')
+  const navigate = useNavigate()
 
-  const handleVideoClick = (url: string) => {
-    setCurrentVideoUrl(url)
-    setIsModalOpen(true)
-  }
+  const { user } = useAppSelector((state: RootState) => state.auth)
 
   useEffect(() => {
     dispatch(getDetailCourseThunk(courseId as string))
   }, [courseId, dispatch])
+
+  const handleCreatePayment = async (courseId: string) => {
+    dispatch(createPaymentApi(courseId)).then((action) => {
+      if (createPaymentApi.fulfilled.match(action)) {
+        const paymentLinks = (action.payload as IPayment)?.links
+        const approvalLink = paymentLinks?.find((link: ILink) => link.rel === 'approval_url')
+        if (approvalLink) {
+          window.location.href = approvalLink.href
+        }
+      }
+    })
+  }
+
+  if (!course && !loading) {
+    return <div className='text-center text-xl font-normal mt-10'>404 | Not Found</div>
+  }
 
   return (
     <div className='mt-10 mx-5 '>
@@ -84,24 +100,40 @@ const DetailCoursePage = () => {
                     <li>Cung cấp doc, source code Github tập đầy đủ</li>
                   </ul>
                   <div className='mt-5'>
-                    <Button className='w-full py-1 mb-3'>Đặt trước</Button>
-                    <Button className='w-full py-1 text-white' variant={'outline'}>
-                      <svg
-                        xmlns='http://www.w3.org/2000/svg'
-                        fill='none'
-                        viewBox='0 0 24 24'
-                        strokeWidth={1.5}
-                        stroke='currentColor'
-                        className='size-5 mx-2'
+                    {user?.courses.includes(course?._id as string) ? (
+                      <Button onClick={() => navigate(`/course/play/${course?._id}`)} className='w-full py-1 mb-3'>
+                        Học ngay
+                      </Button>
+                    ) : (
+                      <Button onClick={() => handleCreatePayment(course?._id as string)} className='w-full py-1 mb-3'>
+                        {course?.price ? 'Mua ngay' : 'Tham gia khóa học'}
+                      </Button>
+                    )}
+                    {!user?.courses.includes(course?._id as string) && (
+                      <Button
+                        onClick={() => {
+                          return dispatch(addToCartThunk(course?._id as string))
+                        }}
+                        className='w-full py-1 text-white'
+                        variant={'outline'}
                       >
-                        <path
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z'
-                        />
-                      </svg>
-                      Thêm vào giỏ hàng
-                    </Button>
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          fill='none'
+                          viewBox='0 0 24 24'
+                          strokeWidth={1.5}
+                          stroke='currentColor'
+                          className='size-5 mx-2'
+                        >
+                          <path
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z'
+                          />
+                        </svg>
+                        Thêm vào giỏ hàng
+                      </Button>
+                    )}
                   </div>
                 </CardDescription>
               </CardContent>
@@ -158,7 +190,7 @@ const DetailCoursePage = () => {
             <AccordionTrigger>{chapter.title}</AccordionTrigger>
             <AccordionContent>
               {chapter.videos.map((video, videoIndex) => (
-                <div key={videoIndex} onClick={() => handleVideoClick(video.url)}>
+                <div key={videoIndex}>
                   <button className='mb-2 flex gap-x-2 items-center'>
                     <svg
                       xmlns='http://www.w3.org/2000/svg'
@@ -182,7 +214,6 @@ const DetailCoursePage = () => {
           </AccordionItem>
         ))}
       </Accordion>
-      <VideoModal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} videoUrl={currentVideoUrl} />
     </div>
   )
 }
