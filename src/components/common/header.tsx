@@ -18,6 +18,7 @@ import { useAppDispatch } from '@/hooks/useAppDispatch'
 import { authRoute } from '@/router/auth.route'
 import { dashboardRoute } from '@/router/dashboard.route'
 import { courseRoute } from '@/router/course.route'
+import { INSTRUCTOR_ROLE } from '@/config/role.config'
 
 const Header = ({ className }: { className?: string }) => {
   const { isAuthenticated, user } = useSelector((state: RootState) => state.auth)
@@ -81,9 +82,16 @@ const Header = ({ className }: { className?: string }) => {
                       Tài khoản
                     </Link>
                   </div>
+                  {user?.role.includes(INSTRUCTOR_ROLE) && (
+                    <div className='w-full p-2 flex flex-col gap-y-3'>
+                      <Link className='' to={dashboardRoute.dashboard.path}>
+                        Dashboard
+                      </Link>
+                    </div>
+                  )}
                   <div className='w-full p-2 flex flex-col gap-y-3'>
-                    <Link className='' to={dashboardRoute.dashboard.path}>
-                      Dashboard
+                    <Link className='' to={courseRoute.myCourse.path}>
+                      Khóa học đã mua
                     </Link>
                   </div>
                   <div className='w-full p-2'>

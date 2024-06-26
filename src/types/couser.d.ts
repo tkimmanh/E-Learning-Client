@@ -1,6 +1,7 @@
 import { SuccessResponse } from './utils'
 
 export interface ICourse {
+  _id?: string
   name: string
   description: string
   price: number
@@ -9,6 +10,7 @@ export interface ICourse {
   image: string | FileList
 }
 export interface IChapter {
+  _id: string
   title: string
   videos: {
     title: string

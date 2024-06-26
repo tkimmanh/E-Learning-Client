@@ -18,13 +18,14 @@ import { useEffect } from 'react'
 const ListCoursePage = () => {
   const dispatch = useAppDispatch()
   const { courses } = useAppSelector((state) => state.course)
-  const { user } = useAppSelector((state) => state.auth)
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth)
 
   useEffect(() => {
-    dispatch(getCoursesThunk()).then(() => {
+    dispatch(getCoursesThunk())
+    if (isAuthenticated) {
       dispatch(currentUserThunk())
-    })
-  }, [dispatch])
+    }
+  }, [dispatch, isAuthenticated])
 
   return (
     <div className='flex gap-x-5 flex-wrap mt-10'>

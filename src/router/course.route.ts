@@ -22,5 +22,9 @@ export const courseRoute = {
   coursePlay: {
     id: '6',
     path: '/course/play/:courseId'
+  },
+  myCourse: {
+    id: '7',
+    path: '/my-course'
   }
 }

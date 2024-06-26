@@ -28,6 +28,7 @@ import { formatCurrencyVND } from '@/lib/utils'
 
 // ** api
 import { createPaymentApi } from '@/redux/payment/action'
+
 import { ILink } from '@/types/link'
 
 const DetailCoursePage = () => {
@@ -35,11 +36,13 @@ const DetailCoursePage = () => {
 
   const { course, loading } = useAppSelector((state: RootState) => state.course)
 
+  const { user } = useAppSelector((state: RootState) => state.auth)
+
+  // const { loading: loadingPayment } = useAppSelector((state: RootState) => state.payment)
+
   const dispatch = useAppDispatch()
 
   const navigate = useNavigate()
-
-  const { user } = useAppSelector((state: RootState) => state.auth)
 
   useEffect(() => {
     dispatch(getDetailCourseThunk(courseId as string))

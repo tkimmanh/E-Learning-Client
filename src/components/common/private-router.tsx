@@ -7,7 +7,7 @@ import { Navigate } from 'react-router-dom'
 // ** hooks
 import { useAppSelector } from '@/hooks/useAppSelector'
 
-const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
+export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAppSelector((state) => state.auth)
   if (isAuthenticated) {
     return <Navigate to='/' />
@@ -15,4 +15,10 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   return children
 }
 
-export default PrivateRoute
+export const RejectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated } = useAppSelector((state) => state.auth)
+  if (!isAuthenticated) {
+    return <Navigate to='/login' />
+  }
+  return children
+}

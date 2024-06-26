@@ -45,3 +45,7 @@ export const getListCourseByUserApi = () => {
 export const getPurchasedCourseByIdApi = (courseId: string) => {
   return http.get(`${BASE_URL}/purchased-course/${courseId}`)
 }
+
+export const listCourseUserApi = () => {
+  return http.get(`${BASE_URL}/list-course-by-user`)
+}
