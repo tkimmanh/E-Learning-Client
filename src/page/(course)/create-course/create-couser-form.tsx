@@ -34,7 +34,7 @@ export const CreateCourseForm: React.FC<CreateCourseFormProps> = ({ onCourseCrea
   const [loading, setLoading] = useState<boolean>(false)
   const [imagePreview, setImagePreview] = useState<string>('')
   const [imageUrl, setImageUrl] = useState<string>('')
-  const [isPaid, setIsPaid] = useState<boolean>(true)
+  const [, setIsPaid] = useState<boolean>(true)
 
   const form = useForm<ICourse>({
     resolver: zodResolver(formSchema),
@@ -44,6 +44,7 @@ export const CreateCourseForm: React.FC<CreateCourseFormProps> = ({ onCourseCrea
       description: '',
       price: 0,
       paid: 'false',
+      discount: 0,
       published: false
     }
   })
@@ -106,6 +107,8 @@ export const CreateCourseForm: React.FC<CreateCourseFormProps> = ({ onCourseCrea
       })
   }
 
+  const paid = form.watch('paid')
+
   return (
     <>
       <Form {...form}>
@@ -138,17 +141,49 @@ export const CreateCourseForm: React.FC<CreateCourseFormProps> = ({ onCourseCrea
           />
           <FormField
             control={form.control}
-            name='price'
+            name='paid'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Giá</FormLabel>
-                <FormControl>
-                  <Input placeholder='Giá khóa học' {...field} disabled={!isPaid} />
-                </FormControl>
+                <FormLabel>Tình trạng</FormLabel>
+                <Select
+                  onValueChange={(value) => {
+                    field.onChange(value)
+                    setIsPaid(value === 'true')
+                    if (value === 'false') {
+                      form.setValue('price', 0)
+                    }
+                  }}
+                  defaultValue={field.value.toString() as string}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder='Chọn tình trạng khóa học' />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value='true'>Mất phí</SelectItem>
+                    <SelectItem value='false'>Miễn phí</SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
           />
+          {paid === 'true' && (
+            <FormField
+              control={form.control}
+              name='price'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Giá</FormLabel>
+                  <FormControl>
+                    <Input placeholder='Giá khóa học' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
           <div className='flex flex-col'>
             <FormField
               control={form.control}
@@ -196,29 +231,16 @@ export const CreateCourseForm: React.FC<CreateCourseFormProps> = ({ onCourseCrea
               </div>
             )}
           </div>
+
           <FormField
             control={form.control}
-            name='paid'
+            name='discount'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Tình trạng</FormLabel>
-                <Select
-                  onValueChange={(value) => {
-                    field.onChange(value)
-                    setIsPaid(value === 'true')
-                  }}
-                  defaultValue={field.value.toString() as string}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder='Chọn tình trạng khóa học' />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value='true'>Mất phí</SelectItem>
-                    <SelectItem value='false'>Miễn phí</SelectItem>
-                  </SelectContent>
-                </Select>
+                <FormLabel>Ưu đãi</FormLabel>
+                <FormControl>
+                  <Input placeholder='Ưu đãi' {...field} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

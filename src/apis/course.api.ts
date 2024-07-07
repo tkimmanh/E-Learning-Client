@@ -49,3 +49,21 @@ export const getPurchasedCourseByIdApi = (courseId: string) => {
 export const listCourseUserApi = () => {
   return http.get(`${BASE_URL}/list-course-by-user`)
 }
+
+export const addFreeCourseApi = (courseId: string) => {
+  return http.post(`${BASE_URL}/add-free-course/${courseId}`)
+}
+
+export const updateCourseApi = (courseId: string, body: ICourse) => {
+  return http.put(`${BASE_URL}/edit-course/${courseId}`, body)
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const updateChapterApi = (courseId: string, chapterId: string, body: any) => {
+  return http.put(`${BASE_URL}/edit-course/${courseId}/chapter/${chapterId}`, body)
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const updateVideoApi = (courseId: string, chapterId: string, videoId: string, body: any) => {
+  return http.put(`${BASE_URL}/edit-course/${courseId}/chapter/${chapterId}/video/${videoId}`, body)
+}

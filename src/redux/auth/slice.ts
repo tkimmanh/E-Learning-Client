@@ -48,8 +48,10 @@ export const authSlice = createSlice({
     })
     // ** current user
     builder.addCase(currentUserThunk.fulfilled, (state, action: PayloadAction<TUserState>) => {
-      state.user = action.payload.user
-      state.isAuthenticated = true
+      if (action.payload.user) {
+        state.user = action.payload.user
+        state.isAuthenticated = true
+      }
     })
     builder.addCase(currentUserThunk.rejected, (state) => {
       state.user = null

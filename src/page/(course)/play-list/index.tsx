@@ -9,6 +9,7 @@ const PlayList = () => {
   const { courseId } = useParams()
   const [purchasedCourse, setPurchasedCourse] = useState<CourseState | null>(null)
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null)
+  const [description, setDescription] = useState<string | null>('')
   const [title, setTitle] = useState<string | null>(null)
 
   const navigate = useNavigate()
@@ -42,6 +43,7 @@ const PlayList = () => {
                           className='mb-4 flex gap-x-2 items-center'
                           onClick={() => {
                             setSelectedVideo(video.url)
+                            setDescription(video.description)
                             setTitle(video.title)
                           }}
                         >
@@ -77,6 +79,10 @@ const PlayList = () => {
             <ReactPlayer url={selectedVideo} width='100%' height='100%' controls />
           </div>
         )}
+        <div>
+          <h1 className='text-xl text-center font-bold mb-2 mt-5'>Description</h1>
+          <p className='text-xl font-medium mb-2 mt-5 h-[300px] overflow-y-scroll'>{description}</p>
+        </div>
       </div>
     </div>
   )

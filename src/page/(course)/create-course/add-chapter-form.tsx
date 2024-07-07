@@ -22,18 +22,15 @@ import { z } from 'zod'
 // ** lib
 import { formSchema } from '@/lib/zod/chapter.schema'
 
+// type
+import { IVideo } from '@/types/couser'
+
 interface AddChapterFormProps {
   courseId: string
 }
 
-interface Video {
-  title: string
-  file: File
-  url?: string
-}
-
 export const AddChapterForm: React.FC<AddChapterFormProps> = ({ courseId }) => {
-  const [videos, setVideos] = useState<Video[]>([])
+  const [videos, setVideos] = useState<IVideo[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
@@ -41,7 +38,8 @@ export const AddChapterForm: React.FC<AddChapterFormProps> = ({ courseId }) => {
     defaultValues: {
       chapterTitle: '',
       videoTitle: '',
-      videoFile: null
+      videoFile: null,
+      description: ''
     }
   })
 
@@ -60,10 +58,10 @@ export const AddChapterForm: React.FC<AddChapterFormProps> = ({ courseId }) => {
     }
   }
 
-  const handleAddVideo = async (title: string, file: File) => {
+  const handleAddVideo = async (title: string, file: File, description: string) => {
     const url = await handleVideoUpload(file)
     if (url) {
-      setVideos([...videos, { title, file, url }])
+      setVideos([...videos, { title, file, url, description }])
     } else {
       console.error('Failed to upload video')
     }
@@ -78,12 +76,27 @@ export const AddChapterForm: React.FC<AddChapterFormProps> = ({ courseId }) => {
     }
   }
 
-  const handleCreateChapter = async (chapterData: { title: string; videos: Video[] }) => {
+  const handleCreateChapter = async (chapterData: { title: string; videos: IVideo[] }) => {
     try {
       const response = await createChapterApi({ courseId, chapterData })
       return response.data.course
     } catch (error) {
       console.error('Error creating chapter:', error)
+    }
+  }
+
+  const onAddVideo = async () => {
+    const { videoTitle, videoFile, description } = form.getValues()
+    if (videoTitle && videoFile && videoFile.length > 0) {
+      await handleAddVideo(videoTitle, videoFile[0], description)
+      form.resetField('videoTitle')
+      form.resetField('videoFile')
+      form.resetField('description')
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+    } else {
+      toast.error('Tiêu đề , hoặc video đang trống', { ...toastConfig })
     }
   }
 
@@ -96,20 +109,6 @@ export const AddChapterForm: React.FC<AddChapterFormProps> = ({ courseId }) => {
         form.reset()
         toast.success('Tạo chương mới thành công', { ...toastConfig })
       })
-    }
-  }
-
-  const onAddVideo = async () => {
-    const { videoTitle, videoFile } = form.getValues()
-    if (videoTitle && videoFile && videoFile.length > 0) {
-      await handleAddVideo(videoTitle, videoFile[0])
-      form.resetField('videoTitle')
-      form.resetField('videoFile')
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ''
-      }
-    } else {
-      toast.error('Tiêu đề , hoặc video đang trống', { ...toastConfig })
     }
   }
 
@@ -166,6 +165,19 @@ export const AddChapterForm: React.FC<AddChapterFormProps> = ({ courseId }) => {
                     type='file'
                     onChange={(e) => field.onChange(e.target.files)}
                   />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='description'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Input placeholder='Description' {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

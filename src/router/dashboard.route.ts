@@ -10,7 +10,7 @@ export const dashboardRoute = {
     path: '/course'
   },
   createCourse: {
-    id: '3',
+    id: '4',
     name: 'Tạo khóa học',
     path: '/course-create'
   }

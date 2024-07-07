@@ -40,9 +40,12 @@ export function LoginForm() {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    dispatch(loginThunk(values)).then(() => {
-      dispatch(currentUserThunk())
-      navigate(commonRoutes.home.path)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    dispatch(loginThunk(values)).then((res: any) => {
+      if (res?.payload?.user) {
+        dispatch(currentUserThunk())
+        navigate(commonRoutes.home.path)
+      }
     })
   }
 

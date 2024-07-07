@@ -25,6 +25,9 @@ import PaymentSuccessPage from './page/(payment)/payment-success'
 import PaymentErrorPage from './page/(payment)/payment-error'
 import MyCoursePage from './page/(course)/my-course'
 import PlayList from './page/(course)/play-list'
+import EditCoursePage from './page/(course)/course-edit'
+import EditChapterPage from './page/(dashboard)/(chapter)'
+import ListChaptersPage from './page/(dashboard)/(chapter)/list-chapter'
 
 // ** components
 import GuardedRoute from './components/common/protected-router'
@@ -32,6 +35,7 @@ import { ProtectedRoute, RejectedRoute } from './components/common/private-route
 
 // ** config
 import { INSTRUCTOR_ROLE } from './config/role.config'
+import ListCourseAdmin from './page/(course)/list-couse-admin'
 
 function App() {
   return (
@@ -76,6 +80,10 @@ function App() {
         >
           <Route path={dashboardRoute.dashboard.path} element={<DashboardPage />} />
           <Route path={dashboardRoute.createCourse.path} element={<CreateCoursePage />} />
+          <Route path={dashboardRoute.couser.path} element={<ListCourseAdmin />} />
+          <Route path={courseRoute.editCourse.path} element={<EditCoursePage />} />
+          <Route path={courseRoute.chapter.path} element={<ListChaptersPage />} />
+          <Route path={courseRoute.chapterEdit.path} element={<EditChapterPage />} />
         </Route>
       </Routes>
     </>

@@ -25,7 +25,7 @@ const DashboardLayout = () => {
             <div className='flex flex-col gap-4 items-center gap-y-5'>
               {routes.map((route) => (
                 <NavLink
-                  className={({ isActive }) => (isActive ? 'text-white font-bold mt-5 ' : 'text-[#a1a1aa]  ')}
+                  className={({ isActive }) => (isActive ? 'text-white font-bold' : 'text-[#a1a1aa]')}
                   key={route.id}
                   to={route.path}
                 >

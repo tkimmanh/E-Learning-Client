@@ -53,7 +53,7 @@ function createHttpInstance(): AxiosInstance {
           })
           return Promise.reject(error)
         }
-        if (status === (HttpStatusCode.Unauthorized as unknown) && !error.response.config?.__isRetryRequest) {
+        if (status === (HttpStatusCode.Unauthorized as unknown)) {
           return new Promise<void>((_resolve, reject) => {
             axios
               .get(`${BASE_URL}auth/logout`)

@@ -30,6 +30,9 @@ import { formatCurrencyVND } from '@/lib/utils'
 import { createPaymentApi } from '@/redux/payment/action'
 
 import { ILink } from '@/types/link'
+import { addFreeCourseApi } from '@/apis/course.api'
+import { currentUserThunk } from '@/redux/auth/action'
+import { toast } from 'react-toastify'
 
 const DetailCoursePage = () => {
   const { courseId } = useParams()
@@ -60,9 +63,24 @@ const DetailCoursePage = () => {
     })
   }
 
+  const handleAddCourseFree = async (courseId: string) => {
+    try {
+      const res = await addFreeCourseApi(courseId)
+      if (res.status === 200) {
+        dispatch(currentUserThunk())
+        toast.success('Tham gia khóa học thành công')
+        navigate(`/course/play/${courseId}`)
+      }
+    } catch (error) {
+      console.log('Error', error)
+    }
+  }
+
   if (!course && !loading) {
     return <div className='text-center text-xl font-normal mt-10'>404 | Not Found</div>
   }
+
+  const discountedPrice = (course?.price ?? 0) - (course?.price ?? 0) * ((course?.discount ?? 0) / 100)
 
   return (
     <div className='mt-10 mx-5 '>
@@ -84,10 +102,26 @@ const DetailCoursePage = () => {
                 <CardHeader className='p-0 py-5'>
                   <CardTitle>
                     <div className='flex flex-col gap-y-5'>
-                      <del className='text-2xl text-gray-500 font-semibold'>2.500.000 ₫</del>
+                      {course?.price && course?.price > 0 ? (
+                        <del className='text-2xl text-gray-500 font-semibold'>
+                          {formatCurrencyVND(course?.price ?? 0)}
+                        </del>
+                      ) : (
+                        <span className='text-2xl text-gray-500 font-semibold'>Miễn phí</span>
+                      )}
                       <div className='flex gap-x-5'>
-                        <span className='text-2xl font-semibold '>{formatCurrencyVND(course?.price as number)}</span>
-                        <Button className='cursor-none text-black bg-white px-2'>Tiết kiệm 20%</Button>
+                        {course?.price && course.price > 0 ? (
+                          <span className='text-2xl font-semibold '>{formatCurrencyVND(discountedPrice) || 0}</span>
+                        ) : (
+                          <div className='hidden'></div>
+                        )}
+                        {course?.price && course.price > 0 ? (
+                          <Button className='cursor-none text-black bg-white px-2'>
+                            Tiết kiệm {course?.discount}%
+                          </Button>
+                        ) : (
+                          <div className='hidden'></div>
+                        )}
                       </div>
                     </div>
                   </CardTitle>
@@ -108,7 +142,14 @@ const DetailCoursePage = () => {
                         Học ngay
                       </Button>
                     ) : (
-                      <Button onClick={() => handleCreatePayment(course?._id as string)} className='w-full py-1 mb-3'>
+                      <Button
+                        onClick={() =>
+                          course?.price
+                            ? handleCreatePayment(course?._id as string)
+                            : handleAddCourseFree(course?._id as string)
+                        }
+                        className='w-full py-1 mb-3'
+                      >
                         {course?.price ? 'Mua ngay' : 'Tham gia khóa học'}
                       </Button>
                     )}
@@ -176,10 +217,11 @@ const DetailCoursePage = () => {
               </ul>
             </TabsContent>
             <TabsContent className='w-full' value='author'>
-              <p className='font-medium text-xl '>
-                Mình sẽ giúp bạn level up skill 🚀 lên nhanh nhất có thể Được hiện là một Front-End developer với hơn 4
-                năm kinh nghiệm làm việc thực tế. Năm 20 tuổi, mình đã viết một ứng dụng đầu tiên trong 4 giờ và nhanh
-                chóng giúp mình kiệm được 1000$ chỉ trong 3 ngày sau đó.
+              <p className='font-medium text-xl'>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                fugiat nulla pariatur.
               </p>
             </TabsContent>
             <TabsContent className='w-full' value='review'></TabsContent>
